@@ -17,7 +17,7 @@ public class EventListener extends Thread{
     }
 
     public void run() {
-        while(readyToQuit()){
+        while(!readyToQuit()){
             if(shouldReply());
             reply();
         }

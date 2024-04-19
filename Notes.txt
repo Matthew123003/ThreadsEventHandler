@@ -27,3 +27,100 @@ Method Declaration: A method is declared as synchronized by adding the synchroni
 
   Overall, synchronized methods are a basic but powerful way to control access to shared resources in Java, ensuring
    that threads do not interfere with each other when modifying shared data.
+
+   The EventTracker class is an implementation of the Tracker interface and represents a singleton event tracking
+   system. It keeps track of event occurrences in a Map where each key is a string (representing an event or message),
+    and the value is an integer (representing the count of times the event has occurred). Let's break down the class in
+     detail:
+
+   Singleton Pattern:
+   The EventTracker class follows the singleton pattern, meaning there is only one instance of the class (INSTANCE)
+    that can be accessed globally.
+   The instance is initialized as a static final field (INSTANCE) and assigned a new instance of EventTracker.
+   The constructor is private, which prevents external classes from creating a new instance of EventTracker.
+   Thread Safety:
+   The getInstance method, which provides access to the singleton instance, is synchronized to ensure thread safety
+    when accessing the instance in a multithreaded environment.
+   The other methods (push, has, and handle) are also synchronized to ensure thread safety when modifying the tracker
+    map or accessing its data.
+   Methods:
+   getInstance: This static method returns the singleton instance of EventTracker. It is synchronized to ensure
+    thread-safe access to the instance.
+
+   tracker: This method returns the internal map (tracker) that keeps track of event counts. It adheres to the
+   Tracker interface's requirement.
+
+   push: This method is used to add or update events in the tracker map.
+
+   It takes a string message as a parameter.
+   If the event already exists in the map, it increments the count by 1.
+   If the event does not exist, it adds the event to the map with a count of 1.
+   The method is synchronized to ensure thread safety.
+   has: This method checks if an event (message) exists in the tracker map and whether its count is greater than 0.
+
+   If the event exists and its count is greater than 0, the method returns true; otherwise, it returns false.
+   The method is synchronized to ensure thread safety.
+   handle: This method is used to handle an event using a provided EventHandler.
+
+   It takes a string message and an EventHandler instance as parameters.
+   The method first calls the handle method on the provided EventHandler instance.
+   If the event (message) exists in the tracker map, it decrements its count by 1.
+   The method is synchronized to ensure thread safety.
+   Constructor:
+   There is a private default constructor that initializes the tracker map as a new HashMap.
+   There is also a non-public constructor (EventTracker(Map<String, Integer> tracker)) that allows creating an
+   instance with a provided map. However, it is for testing purposes only and is not intended for use in regular
+    application code.
+   In summary, the EventTracker class is a thread-safe, singleton class for tracking event occurrences using a map.
+    It provides methods for adding or updating events, checking event existence, handling events, and accessing the
+     event tracker map.
+
+The EventListener class extends the Thread class, meaning it can be used as a thread in a multithreaded environment.
+ This class listens for specific events and replies with a corresponding message when the events occur. Let's break
+  down the class in detail:
+
+Fields:
+messageToListenFor: This field is a string representing the message the EventListener is listening for. When the event
+ tracker contains this message, the listener will reply.
+messageToReplyWith: This field is a string representing the reply message the EventListener will use when responding
+to the event it is listening for.
+eventTracker: This field holds a reference to a Tracker instance, which is used to interact with the event tracking
+system. By default, it is set to the singleton instance of EventTracker when the class is instantiated.
+Constructors:
+EventListener(String message, String reply): This constructor initializes the EventListener with a message to listen
+for (message) and a reply message (reply). The eventTracker field is set to the singleton instance of EventTracker.
+EventListener(String message, String reply, Tracker tracker): This constructor also initializes the EventListener with
+a message to listen for and a reply message, but it accepts an external Tracker instance instead of defaulting to the
+ singleton instance.
+Methods:
+run():
+
+This method contains the main logic for the thread.
+It runs in a loop until the method readyToQuit() returns true.
+In each iteration, it checks if the event tracker has the message to listen for (shouldReply()).
+If it does, it calls the reply() method to respond with the messageToReplyWith message.
+readyToQuit():
+
+This method returns true if the event tracker contains the "quit" message.
+This acts as a termination condition for the thread, causing it to stop running.
+shouldReply():
+
+This method returns true if the event tracker contains the messageToListenFor message.
+This condition determines whether the thread should reply during each iteration of the run() loop.
+reply():
+
+This method handles the reply action.
+It uses the event tracker to handle the event specified by messageToListenFor.
+The event handler in this method prints messageToReplyWith using System.out.println(). This allows the listener to
+reply when the message to listen for is found.
+Summary:
+The EventListener class is a thread that listens for a specific event message (messageToListenFor) in the eventTracker.
+ If the event occurs, the listener replies with the specified message (messageToReplyWith). The thread continues
+  running until the event tracker contains the "quit" message. The class also allows specifying an alternative Tracker
+  instance for more flexibility.
+
+
+
+
+
+

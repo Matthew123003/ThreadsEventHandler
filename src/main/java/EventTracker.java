@@ -15,14 +15,31 @@ public class EventTracker implements Tracker {
         return INSTANCE;
     }
 
+    @Override
+    public Map<String, Integer> tracker() {
+        return tracker;
+    }
+
     synchronized public void push(String message) {
+            if(has(message)){
+                tracker.put(message, tracker.get(message) + 1);
+            }else{
+                tracker.put(message, 1);
+            }
     }
 
     synchronized public Boolean has(String message) {
-        return null;
+            if(tracker.containsKey(message)){
+                return tracker.get(message) > 0;
+            }
+            return false;
     }
 
     synchronized public void handle(String message, EventHandler e) {
+            e.handle();
+            if(has(message)){
+                tracker.put(message, tracker.get(message) - 1);
+            }
     }
 
     // Do not use this. This constructor is for tests only
