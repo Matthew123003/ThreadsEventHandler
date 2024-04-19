@@ -3,7 +3,7 @@ import java.util.Map;
 
 public class EventTracker implements Tracker {
 
-    private static EventTracker INSTANCE = new EventTracker();
+    private static final EventTracker INSTANCE = new EventTracker();
 
     private Map<String, Integer> tracker;
 
@@ -12,7 +12,7 @@ public class EventTracker implements Tracker {
     }
 
     synchronized public static EventTracker getInstance() {
-        return null;
+        return INSTANCE;
     }
 
     synchronized public void push(String message) {
